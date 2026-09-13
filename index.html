@@ -10,7 +10,26 @@
   <link rel="stylesheet" href="./styles.css" />
 </head>
 <body>
-  <div class="app-shell">
+  <main class="access-gate" id="accessGate" aria-labelledby="accessGateTitle">
+    <section class="access-card">
+      <span class="access-mark">秋</span>
+      <p class="access-kicker">AUTUMN JOB WORKBENCH · 2027</p>
+      <h1 id="accessGateTitle">进入我的秋招工作台</h1>
+      <p class="access-copy">请输入访问密码。你的投递记录仍只保存在当前浏览器中。</p>
+      <form id="accessForm" class="access-form">
+        <label for="accessPassword">访问密码</label>
+        <div class="access-input-row">
+          <input id="accessPassword" name="password" type="password" autocomplete="current-password" required autofocus placeholder="输入密码" />
+          <button type="submit">进入</button>
+        </div>
+        <label class="access-remember"><input id="rememberAccess" type="checkbox" checked /> 在这台设备上记住我</label>
+        <p class="access-error" id="accessError" role="alert" aria-live="polite"></p>
+      </form>
+      <small>GitHub Pages · 本地数据模式</small>
+    </section>
+  </main>
+
+  <div class="app-shell" id="appShell" hidden>
     <aside class="sidebar" aria-label="主导航">
       <div class="brand" aria-label="秋招工作台">
         <span class="brand-mark">秋</span>
@@ -165,6 +184,59 @@
 
   <datalist id="resumeVersions"><option value="通用中文-v1"></option><option value="海外GTM-v1"></option><option value="海外GTM-v2"></option><option value="用户研究-v1"></option><option value="运营增长-v1"></option></datalist>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
-  <script src="./app.js"></script>
+  <script>
+    (() => {
+      const passwordHash = "9f4f9c46b2f635708f3bc91ada099481dde796346ba3785adb5bb17c4a5534f1";
+      const rememberedKey = "autumn-job-workbench-access-v1";
+      const sessionKey = "autumn-job-workbench-session-v1";
+      const gate = document.querySelector("#accessGate");
+      const shell = document.querySelector("#appShell");
+      const form = document.querySelector("#accessForm");
+      const input = document.querySelector("#accessPassword");
+      const remember = document.querySelector("#rememberAccess");
+      const error = document.querySelector("#accessError");
+      let appLoaded = false;
+
+      function loadApp() {
+        if (appLoaded) return;
+        appLoaded = true;
+        const script = document.createElement("script");
+        script.src = "./app.js";
+        document.body.append(script);
+      }
+
+      function unlock() {
+        gate.hidden = true;
+        shell.hidden = false;
+        document.documentElement.classList.add("workbench-unlocked");
+        loadApp();
+      }
+
+      async function digest(value) {
+        const bytes = new TextEncoder().encode(value);
+        const hash = await crypto.subtle.digest("SHA-256", bytes);
+        return [...new Uint8Array(hash)].map(byte => byte.toString(16).padStart(2, "0")).join("");
+      }
+
+      if (localStorage.getItem(rememberedKey) === passwordHash || sessionStorage.getItem(sessionKey) === "yes") {
+        unlock();
+        return;
+      }
+
+      form.addEventListener("submit", async event => {
+        event.preventDefault();
+        error.textContent = "正在验证…";
+        if (await digest(input.value) !== passwordHash) {
+          error.textContent = "密码不正确，请重新输入。";
+          input.select();
+          return;
+        }
+        sessionStorage.setItem(sessionKey, "yes");
+        if (remember.checked) localStorage.setItem(rememberedKey, passwordHash);
+        else localStorage.removeItem(rememberedKey);
+        unlock();
+      });
+    })();
+  </script>
 </body>
 </html>

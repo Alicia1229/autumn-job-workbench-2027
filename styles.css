@@ -26,6 +26,23 @@ button, select { cursor: pointer; }
 button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible { outline: 3px solid rgba(70, 99, 243, .22); outline-offset: 2px; }
 a { color: inherit; }
 
+.access-gate { min-height: 100vh; display: grid; place-items: center; padding: 24px; color: white; background: radial-gradient(circle at 78% 25%, rgba(255,105,51,.35), transparent 20%), radial-gradient(circle at 20% 78%, rgba(70,99,243,.3), transparent 24%), var(--navy); }
+.access-gate[hidden], .app-shell[hidden] { display: none; }
+.access-card { width: min(460px, 100%); padding: 42px; border: 1px solid rgba(255,255,255,.12); border-radius: 24px; background: rgba(255,255,255,.075); box-shadow: 0 28px 80px rgba(0,0,0,.28); backdrop-filter: blur(18px); }
+.access-mark { width: 46px; height: 46px; display: grid; place-items: center; border-radius: 13px 13px 13px 4px; color: white; background: var(--orange); font-size: 23px; font-weight: 900; box-shadow: 0 10px 26px rgba(255,105,51,.3); }
+.access-kicker { margin: 28px 0 8px; color: #ffac8e; font-size: 10px; font-weight: 850; letter-spacing: .16em; }
+.access-card h1 { margin: 0; font-size: clamp(28px, 6vw, 38px); line-height: 1.16; letter-spacing: -.045em; }
+.access-copy { margin: 13px 0 28px; color: #bfc6d6; font-size: 13px; line-height: 1.65; }
+.access-form { display: grid; gap: 10px; }
+.access-form > label:first-child { color: #d8dce6; font-size: 12px; font-weight: 750; }
+.access-input-row { display: grid; grid-template-columns: 1fr auto; gap: 9px; }
+.access-input-row input { min-width: 0; min-height: 48px; padding: 0 14px; border: 1px solid rgba(255,255,255,.16); border-radius: 11px; color: white; background: rgba(10,14,23,.36); outline: none; }
+.access-input-row input:focus { border-color: #8ea0ff; box-shadow: 0 0 0 3px rgba(70,99,243,.24); }
+.access-input-row button { min-height: 48px; padding: 0 21px; border: 0; border-radius: 11px; color: white; background: var(--orange); font-weight: 800; }
+.access-remember { display: flex; align-items: center; gap: 7px; color: #aeb5c6; font-size: 12px; font-weight: 500; }
+.access-error { min-height: 20px; margin: 2px 0 0; color: #ffb5a0; font-size: 12px; }
+.access-card > small { display: block; margin-top: 24px; color: #7f899f; font-size: 10px; letter-spacing: .08em; }
+
 .app-shell { min-height: 100vh; display: grid; grid-template-columns: 248px minmax(0, 1fr); }
 .sidebar { position: sticky; top: 0; height: 100vh; padding: 28px 18px 20px; background: var(--navy); color: white; display: flex; flex-direction: column; z-index: 10; }
 .brand { display: flex; align-items: center; gap: 12px; padding: 0 8px 34px; }
@@ -266,6 +283,8 @@ a { color: inherit; }
 }
 
 @media (max-width: 410px) {
+  .access-card { padding: 30px 22px; }
+  .access-input-row { grid-template-columns: 1fr; }
   .topbar-actions .primary-button { max-width: 128px; line-height: 1.2; }
   .snapshot-grid { grid-template-columns: 1fr; }
   .metric-card { min-height: 104px; }
